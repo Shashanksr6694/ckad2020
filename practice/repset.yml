@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  creationTimestamp: null
+  labels:
+    run: repset
+  name: repset
+spec:
+  selector: 
+   matchLabels: 
+    app: repset
+  replicas: 2
+  template: 
+   metadata: 
+    name: repset
+    labels: 
+     app: repset
+   spec:
+     containers:
+      - image: nginx
+        name: repset
+        ports:
+         - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    run: repset
+  name: repset
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 80
+  selector:
+    app: repset
+  type: NodePort

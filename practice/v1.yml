@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: p1
+  name: p1
+spec:
+  volumes: 
+   - name: v1
+     emptyDir: {}
+  containers:
+  - image: alpine
+    name: p1
+    volumeMounts: 
+     - name: v1
+       mountPath: /mydata
+    command: ["/bin/sh","-c","while true; do date >> /mydata/output.txt; sleep 2; done"]
+    resources: {}
+  dnsPolicy: ClusterFirst
+  restartPolicy: Never
+status: {}

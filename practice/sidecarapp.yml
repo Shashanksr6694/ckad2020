@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: sidecarapp
+  name: sidecarapp
+spec:
+  volumes: 
+   - name: appvol
+     emptyDir: {}
+  containers:
+  - image: nginx
+    name: sidecarapp
+    ports:
+    - containerPort: 80
+    volumeMounts:
+     - name: appvol
+       mountPath: /usr/share/nginx/html/
+
+  - image: alpine
+    name: sidecar
+    volumeMounts:
+     - name: appvol
+       mountPath: /random
+    command: ["/bin/sh","-c"," while true ; do echo '<h1> Hello all i Am SideCar </h1>' >> /random/index.html; sleep 5; done"]
+    resources: {}
+  dnsPolicy: ClusterFirst
+  restartPolicy: Never
+status: {}

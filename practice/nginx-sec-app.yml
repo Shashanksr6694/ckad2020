@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: nginx-sec-app
+  name: nginx-sec-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx-sec-app
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: nginx-sec-app
+    spec:
+      volumes: 
+       - name: secret
+         secret:
+          secretName: nginxsecret
+       - name: configmap
+         configMap:
+          name: nginxconfigmap
+      containers:
+      - image: shashanksr/myappnginx:latest
+        name: nginxsecure
+        ports:
+         - containerPort: 443
+         - containerPort: 80
+        volumeMounts: 
+         - name: secret
+           mountPath: /etc/nginx/ssl
+         - name: configmap
+           mountPath: /etc/nginx/conf.d 
+---
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    app: nginx-sec-app
+  name: nginx-sec-app
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 80
+    name: http
+  - port: 443
+    protocol: TCP
+    targetPort: 443
+    name: https
+  selector:
+    app: nginx-sec-app
+  type: NodePort

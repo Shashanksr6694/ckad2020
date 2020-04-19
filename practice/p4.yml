@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: p4
+  name: p4
+spec:
+  containers:
+  - image: alpine
+    name: p4
+    command: ["/bin/sh","-c"]
+    args: 
+     - "sleep infinity"
+    resources: {}
+  dnsPolicy: ClusterFirst
+  restartPolicy: Never
+status: {}

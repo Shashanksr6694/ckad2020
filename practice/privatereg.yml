@@ -1,0 +1,35 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: privatepod
+  name: privatepod
+spec:
+  containers:
+  - image: shashanksr/private:latest
+    name: privatepod
+    ports:
+    - containerPort: 80
+  imagePullSecrets:
+    - name: privatereg
+  dnsPolicy: ClusterFirst
+  restartPolicy: Never
+status: {}
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    run: privatepod
+  name: privatepod
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 80
+  selector:
+    run: privatepod
+  type: NodePort
