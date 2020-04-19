@@ -1,0 +1,5 @@
+shawebappsvc.yml
+shawebapp.yml
+nginx.dockerfile
+dockerfile
+.dockerignore

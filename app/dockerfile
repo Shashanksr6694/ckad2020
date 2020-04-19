@@ -1,0 +1,8 @@
+FROM centos
+MAINTAINER shashank
+ENV color=green
+RUN yum install httpd -y
+WORKDIR /opt
+COPY .  .
+EXPOSE 80
+ENTRYPOINT ["/bin/bash","/opt/startweb.sh"]

@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: helloshashank
+  name: helloshashank
+spec:
+  containers:
+  - image: alpine
+    name: helloshashank
+    command: ["/bin/sh","-c"]
+    args: 
+    - "ping -i 10 8.8.8.8 > /tmp/adhoc.txt"
+    resources: {}
+  dnsPolicy: ClusterFirst
+  restartPolicy: Never
+status: {}

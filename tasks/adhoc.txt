@@ -1,0 +1,13 @@
+PING 8.8.8.8 (8.8.8.8): 56 data bytes
+64 bytes from 8.8.8.8: seq=0 ttl=50 time=1.258 ms
+64 bytes from 8.8.8.8: seq=1 ttl=50 time=1.253 ms
+64 bytes from 8.8.8.8: seq=2 ttl=50 time=1.435 ms
+64 bytes from 8.8.8.8: seq=3 ttl=50 time=1.356 ms
+64 bytes from 8.8.8.8: seq=4 ttl=50 time=1.297 ms
+64 bytes from 8.8.8.8: seq=5 ttl=50 time=1.251 ms
+64 bytes from 8.8.8.8: seq=6 ttl=50 time=1.287 ms
+64 bytes from 8.8.8.8: seq=7 ttl=50 time=1.307 ms
+64 bytes from 8.8.8.8: seq=8 ttl=50 time=1.328 ms
+64 bytes from 8.8.8.8: seq=9 ttl=50 time=1.284 ms
+64 bytes from 8.8.8.8: seq=10 ttl=50 time=1.279 ms
+64 bytes from 8.8.8.8: seq=11 ttl=50 time=1.285 ms

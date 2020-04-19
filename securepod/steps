@@ -1,0 +1,5 @@
+openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout nginx.key -out nginx.crt -subj "/CN=my-nginx/O=my-nginx"
+
+kubectl create secret tls nginxsecret --key nginx.key --cert nginx.crt -n shashank
+kubectl create configmap nginxconfigmap --from-file=default.conf -n shashank
+

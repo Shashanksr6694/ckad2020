@@ -1,0 +1,204 @@
+Task 1.
+----------------------
+[root@lab ~]# kubectl run helloshashank --image=alpine --restart=Never --dry-run -o yaml > task1.yaml
+W0411 19:20:35.703788    7468 helpers.go:535] --dry-run is deprecated and can be replaced with --dry-run=client.
+
+Edit the above created task1.yaml
+_____________________________________
+
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: helloshashank
+  name: helloshashank
+spec:
+  containers:
+  - image: alpine
+    name: helloshashank
+    command: ["/bin/sh","-c"]
+    args: 
+    - "ping -i 10 8.8.8.8 > /tmp/adhoc.txt"  #### added ping command to run every 10 sec
+    resources: {}
+  dnsPolicy: ClusterFirst
+  restartPolicy: Never
+status: {}
+
+
+Performing task
+_____________________________
+
+[root@lab ]# kubectl create -f task1.yaml -n shashank
+pod/helloshashank created
+
+[root@lab ]# kubectl get pods -n shashank
+NAME            READY   STATUS    RESTARTS   AGE
+helloshashank   1/1     Running   0          8s
+
+[root@lab ]# kubectl exec -it helloshashank sh -n shashank
+kubectl exec [POD] [COMMAND] is DEPRECATED and will be removed in a future version. Use kubectl kubectl exec [POD] -- [COMMAND] instead.
+/ # cd /tmp
+/tmp # ls
+adhoc.txt
+/tmp # cat adhoc.txt 
+PING 8.8.8.8 (8.8.8.8): 56 data bytes
+64 bytes from 8.8.8.8: seq=0 ttl=50 time=1.258 ms
+64 bytes from 8.8.8.8: seq=1 ttl=50 time=1.253 ms
+64 bytes from 8.8.8.8: seq=2 ttl=50 time=1.435 ms
+64 bytes from 8.8.8.8: seq=3 ttl=50 time=1.356 ms
+
+
+Task 2.
+-----------------------
+
+[root@lab ]# kubectl run helloshashank1 --image=busybox --restart=Never --dry-run -o yaml > task2.yaml
+W0411 19:23:55.736841    7888 helpers.go:535] --dry-run is deprecated and can be replaced with --dry-run=client.
+
+Edited the above task2.yaml
+________________________________
+
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: helloshashank1
+  name: helloshashank1
+spec:
+  containers:
+  - image: busybox
+    name: helloshashank1
+    workingDir: /opt
+    command: ["/bin/sh","-c"]
+    args:
+    - "sleep infinity"
+    resources: {}
+  dnsPolicy: ClusterFirst
+  restartPolicy: Never
+status: {}
+
+
+Performing task
+________________________
+
+[root@lab ]# kubectl create -f task2.yaml -n shashank
+pod/helloshashank1 created
+
+[root@lab ]# kubectl get pods -n shashank
+NAME             READY   STATUS    RESTARTS   AGE
+helloshashank    1/1     Running   0          74s
+helloshashank1   1/1     Running   0          30s
+
+[root@lab ]# kubectl exec -it helloshashank1 sh -n shashank
+kubectl exec [POD] [COMMAND] is DEPRECATED and will be removed in a future version. Use kubectl kubectl exec [POD] -- [COMMAND] instead.
+/opt
+
+
+Performing rest of the task 
+______________________________
+
+[root@lab ]# kubectl cp shashank/helloshashank:/tmp/adhoc.txt adhoc.txt
+tar: removing leading '/' from member names
+[root@lab ]# ls
+adhoc.txt  task1.yaml  task2.yaml
+
+[root@lab ]# cat adhoc.txt 
+PING 8.8.8.8 (8.8.8.8): 56 data bytes
+64 bytes from 8.8.8.8: seq=0 ttl=50 time=1.258 ms
+64 bytes from 8.8.8.8: seq=1 ttl=50 time=1.253 ms
+64 bytes from 8.8.8.8: seq=2 ttl=50 time=1.435 ms
+64 bytes from 8.8.8.8: seq=3 ttl=50 time=1.356 ms
+64 bytes from 8.8.8.8: seq=4 ttl=50 time=1.297 ms
+
+[root@lab ]# kubectl cp adhoc.txt shashank/helloshashank1:/opt
+
+[root@lab ]# kubectl exec -it helloshashank1 sh -n shashank
+kubectl exec [POD] [COMMAND] is DEPRECATED and will be removed in a future version. Use kubectl kubectl exec [POD] -- [COMMAND] instead.
+/opt # ls
+adhoc.txt
+
+[root@lab ]# kubectl exec helloshashank1 -n shashank -- /bin/sh -c "cat adhoc.txt | wc -c > count.txt"
+
+[root@lab ]# kubectl exec -it helloshashank1 sh -n shashank
+kubectl exec [POD] [COMMAND] is DEPRECATED and will be removed in a future version. Use kubectl kubectl exec [POD] -- [COMMAND] instead.
+/opt # cat adhoc.txt | wc -c
+640
+/opt # ls
+adhoc.txt  count.txt
+/opt # cat count.txt 
+640
+
+
+Task 3.
+--------------------
+
+[root@lab ~]# kubectl run helloshashank2 --image=alpine --restart=Never --dry-run -o yaml > task3.yaml
+W0411 19:31:40.532649    8431 helpers.go:535] --dry-run is deprecated and can be replaced with --dry-run=client.
+
+Edited the above created task3.yaml
+______________________________________
+
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: helloshashank2
+  name: helloshashank2
+spec:
+  containers:
+  - image: alpine
+    name: helloshashank2
+    command: ["/bin/sh","-c"]
+    args:
+    - "sleep infinity"
+    resources: {}
+  dnsPolicy: ClusterFirst
+  restartPolicy: Never
+status: {}
+
+
+
+Performing task
+____________________
+
+[root@lab ]# kubectl create -f task3.yaml -n shashank
+pod/helloshashank2 created
+
+[root@lab ]# kubectl get pods -n shashank
+NAME             READY   STATUS    RESTARTS   AGE
+helloshashank    1/1     Running   0          4m4s
+helloshashank1   1/1     Running   0          3m20s
+helloshashank2   1/1     Running   0          7s
+
+[root@lab ]# kubectl get pods -n shashank -o wide
+NAME             READY   STATUS    RESTARTS   AGE     IP                NODE                            NOMINATED NODE   READINESS GATES
+helloshashank    1/1     Running   0          4m54s   192.168.90.183    ip-172-31-34-99.ec2.internal    <none>           <none>
+helloshashank1   1/1     Running   0          4m10s   192.168.145.225   ip-172-31-37-226.ec2.internal   <none>           <none>
+helloshashank2   1/1     Running   0          57s     192.168.90.178    ip-172-31-34-99.ec2.internal    <none>           <none>
+
+[root@lab ]# kubectl get pods -n shashank -o wide | awk '{print$6}' | grep 192*
+192.168.90.183
+192.168.145.225
+192.168.90.178
+
+[root@lab ]# kubectl get pods -n shashank -o wide | awk '{print$6}' | grep 192* > IP.txt
+[root@lab ]# ls
+adhoc.txt  IP.txt  task1.yaml  task2.yaml  task3.yaml
+
+[root@lab ]# kubectl cp IP.txt shashank/helloshashank2:/root/IP.txt
+
+[root@lab ]# kubectl exec -it helloshashank2 sh -n shashank
+kubectl exec [POD] [COMMAND] is DEPRECATED and will be removed in a future version. Use kubectl kubectl exec [POD] -- [COMMAND] instead.
+/ # ls
+bin    etc    lib    mnt    proc   run    srv    tmp    var
+dev    home   media  opt    root   sbin   sys    usr
+/ # cd /root
+~ # ls
+IP.txt
+~ # cat IP.txt 
+192.168.90.183
+192.168.145.225
+192.168.90.178
+

@@ -1,0 +1,6 @@
+FROM nginx
+MAINTAINER shashank
+COPY green.html /usr/share/nginx/html/index.html
+RUN chmod +r /usr/share/nginx/html/index.html
+EXPOSE 80
+

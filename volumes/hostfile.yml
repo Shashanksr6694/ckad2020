@@ -1,0 +1,24 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: volapp2
+  name: volapp2
+spec:
+  volumes:
+   - name: volapp2
+     hostPath:
+      path: /etc/passwd
+      type: File
+  containers:
+  - image: alpine
+    name: volapp2
+    volumeMounts: 
+     - name: volapp2
+       mountPath: /mydata/passwd
+    command: ["/bin/sh","-c","while true ; do wc -l /mydata/passwd; sleep 2; done"]
+    resources: {}
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always
+status: {}

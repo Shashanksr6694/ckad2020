@@ -1,0 +1,38 @@
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  creationTimestamp: null
+  labels:
+    run: shashankreplica
+  name: shashankreplica
+spec:
+  replicas: 4
+  template:
+   metadata:
+    name: repshashank
+    labels:
+     app: shashankreplica
+   spec:
+     containers:
+      - image: nginx
+        name: shashankreplica
+        ports:
+         - containerPort: 80
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    run: shashankreplica
+  name: shashankreplica
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 80
+  selector:
+    app: shashankreplica
+status:
+  loadBalancer: {}
